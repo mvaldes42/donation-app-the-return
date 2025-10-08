@@ -1,5 +1,12 @@
 import express from 'express'
 import http from 'http'
+// @ts-ignore
+import cors from 'cors'
+import bodyParser from 'body-parser'
+import { expressMiddleware } from '@apollo/server/express4'
+// @ts-ignore
+import { createContext, EXPECTED_OPTIONS_KEY } from 'dataloader-sequelize'
+import { WebSocketServer } from 'ws'
 import {
   generateModelTypes,
   generateApolloServer
@@ -21,25 +28,35 @@ graphqlSchemaDeclaration.task = {
 
 const pubSubInstance = new PubSub()
 
+const app = express()
+const port = process.env.PORT || 8080
+const httpServer = http.createServer({}, app)
+const wsServer = new WebSocketServer({ server: httpServer, path: '/graphql' })
+
 const server = generateApolloServer({
   graphqlSchemaDeclaration,
   types,
   models,
-  pubSubInstance
+  pubSubInstance,
+  wsServer,
+  callWebhook: async () => undefined
 })
+;(async () => {
+  await server.start()
 
-const app = express()
-server.applyMiddleware({
-  app,
-  path: '/graphql'
-})
-
-const port = process.env.PORT || 8080
-
-const serverHttp = http.createServer({}, app).listen(port, async () => {
-  console.log(
-    `🚀 http/https/h2 server runs on  http://localhost:${port}/graphql .`
+  app.use(
+    '/graphql',
+    cors(),
+    bodyParser.json(),
+    expressMiddleware(server, {
+      context: async () => {
+        const dataloaderContext = createContext(models.sequelize)
+        return { [EXPECTED_OPTIONS_KEY]: dataloaderContext }
+      }
+    })
   )
-})
 
-server.installSubscriptionHandlers(serverHttp)
+  httpServer.listen(port, () => {
+    console.log(`🚀 http server ready at http://localhost:${port}/graphql`)
+  })
+})()
