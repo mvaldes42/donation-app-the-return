@@ -1,0 +1,60 @@
+{
+  "name": "ts-boilerplate",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@apollo/client": "3.5.10",
+    "@types/node": "^20.10.6",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
+    "apollo-client": "^2.6.10",
+    "graphql": "^16.6.0",
+    "graphql-relay": "^0.6.0",
+    "graphql-sequelize": "^9.4.0",
+    "graphql-sequelize-generator": "7.4.1",
+    "pm2": "^5.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-scripts": "5.0.1",
+    "sequelize": "6.28.0",
+    "sqlite3": "^5.0.0",
+    "subscriptions-transport-ws": "^0.9.18",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^3.14.2",
+    "typescript": "^5.3.3",
+    "use-debounce": "^5.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "dev": "pm2 delete all -s; DEBUG=* pm2 startOrReload ecosystem.config.js && pm2 start react-scripts --name web -- start",
+    "db-reset": "rm -f data/database.sqlite && ./node_modules/.bin/sequelize db:migrate --config config/config.json && ./node_modules/.bin/sequelize db:seed:all --config config/config.json",
+    "db-migrate": "./node_modules/.bin/sequelize db:migrate --config config/config.json"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "resolutions": {
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.3.0",
+    "ts-node-dev": "^2.0.0"
+  }
+}
