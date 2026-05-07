@@ -1,6 +1,6 @@
 import { DataTypes, Sequelize } from 'sequelize'
 
-export default function Donation(sequelize: Sequelize) {
+export default function Donation(sequelize: any) {
   const Donation = sequelize.define(
     'donation',
     {
@@ -52,6 +52,10 @@ export default function Donation(sequelize: Sequelize) {
       paranoid: true
     }
   )
+
+  Donation.associate = (models: any) => {
+    models.donation.hasMany(models.transaction, { foreignKey: 'donationId' })
+  }
 
   return Donation
 }

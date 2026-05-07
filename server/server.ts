@@ -26,6 +26,11 @@ graphqlSchemaDeclaration.donation = {
   subscriptions: ['create', 'update', 'delete']
 }
 
+graphqlSchemaDeclaration.transaction = {
+  model: models.transaction,
+  actions: ['list', 'create', 'update', 'delete', 'count'],
+  subscriptions: ['create', 'update', 'delete']
+}
 const pubSubInstance = new PubSub()
 
 const app = express()
