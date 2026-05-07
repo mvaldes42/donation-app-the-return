@@ -16,11 +16,17 @@ export default function Transaction(sequelize: any) {
       },
       refundedAmount: {
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: false,
+        defaultValue: 0
       },
       donationId: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true,
+        defaultValue: null,
+        references: {
+          model: 'donation',
+          key: 'id'
+        }
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -37,7 +43,7 @@ export default function Transaction(sequelize: any) {
     },
     {
       freezeTableName: true,
-      tableName: 'donation',
+      tableName: 'transaction',
       paranoid: true
     }
   )

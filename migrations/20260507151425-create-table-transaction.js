@@ -14,11 +14,13 @@ module.exports = {
       },
       refundedAmount: {
         type: Sequelize.INTEGER,
-        allowNull: true
+        allowNull: false,
+        defaultValue: 0
       },
       donationId: {
-        type: Sequelize.UUID,
-        allowNull: false,
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null,
         references: {
           model: 'donation',
           key: 'id'
@@ -34,7 +36,8 @@ module.exports = {
       },
       deletedAt: {
         type: Sequelize.DATE,
-        allowNull: true
+        allowNull: true,
+        defaultValue: null
       }
     })
   },
